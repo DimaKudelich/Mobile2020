@@ -2,6 +2,7 @@ package com.example.lab1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,33 +10,48 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class FirstActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
     TextView textView;
     EditText editText;
     Button button;
-    Integer result;
+
+    int sum;
+    int firstNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_first);
+        setContentView(R.layout.activity_main);
 
-        textView = (TextView) findViewById(R.id.Result);
-        editText = (EditText) findViewById(R.id.FirstNumber);
-        button = (Button) findViewById(R.id.ToSecondActivity);
+        textView = findViewById(R.id.textView);
+        button = findViewById(R.id.button);
 
-        Intent intent = getIntent();
-        result = intent.getIntExtra("result", 0);
+        firstNumber = Integer.parseInt(textView.getText().toString());
+        textView.setText(String.valueOf(firstNumber));
 
-        textView.setText(result.toString());
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                editText = findViewById(R.id.number);
 
-        button.setOnClickListener(this);
+                int number = Integer.parseInt(editText.getText().toString());
+                sum = number + firstNumber;
+
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                intent.putExtra("number", sum);
+                startActivityForResult(intent, 10);
+            }
+        });
     }
 
-    @Override
-    public void onClick(View v) {
-        Intent intent = new Intent(this, SecondActivity.class);
-        intent.putExtra("first_number", editText.getText().length() != 0 ? Integer.parseInt(editText.getText().toString()) : 0);
-        startActivity(intent);
+    protected void onActivityResult(int requestCode,int resultCode, Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+
+        if (requestCode == 10){
+            if (resultCode == Activity.RESULT_OK){
+                int res = data.getIntExtra("result",0);
+                textView.setText(String.valueOf(res));
+                firstNumber = Integer.parseInt(textView.getText().toString());
+            }
+        }
     }
 }

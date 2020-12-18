@@ -9,33 +9,33 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class SecondActivity extends AppCompatActivity implements View.OnClickListener {
-
+public class SecondActivity extends AppCompatActivity {
     TextView textView;
     EditText editText;
     Button button;
-    Integer firstNumber;
 
+    int sum;
+    int firstNum;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second);
+        setContentView(R.layout.activity_main);
 
-        textView = (TextView) findViewById(R.id.FirstNumber);
-        editText = (EditText) findViewById(R.id.SecondNumber);
-        button = (Button) findViewById(R.id.ToFirstActivity);
+        firstNum = getIntent().getIntExtra("number", 0);
+        textView = findViewById(R.id.textView);
+        textView.setText(String.valueOf(firstNum));
+        button = findViewById(R.id.button);
 
-        Intent intent = getIntent();
-        firstNumber = intent.getIntExtra("first_number", 0);
-
-        textView.setText(firstNumber.toString());
-        button.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        Intent intent = new Intent(this, FirstActivity.class);
-        intent.putExtra("result", editText.getText().length() != 0 ? firstNumber + Integer.parseInt(editText.getText().toString()) : firstNumber);
-        startActivity(intent);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                editText = findViewById(R.id.number);
+                int number = Integer.parseInt(editText.getText().toString());
+                sum = number + firstNum;
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("result", sum);
+                setResult(RESULT_OK, returnIntent);
+                finish();
+            }
+        });
     }
 }

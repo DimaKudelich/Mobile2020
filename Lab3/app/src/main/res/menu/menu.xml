@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/bin" android:title="@string/binary"/>
+    <item android:id="@+id/oct" android:title="@string/octal"/>
+    <item android:id="@+id/hex" android:title="@string/hex"/>
+</menu>
